@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kirim Lokasi Anda</title>
+</head>
+<body>
+  <h2>Kirim Lokasi Anda</h2>
+  <button onclick="getLocation()">Kirim Lokasi</button>
+  <p id="location"></p>
+
+  <script>
+    function getLocation() {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPosition, showError);
+      } else {
+        document.getElementById("location").innerHTML = "Geolocation tidak didukung oleh browser Anda.";
+      }
+    }
+
+    function showPosition(position) {
+      var lat = position.coords.latitude;
+      var lon = position.coords.longitude;
+      var locationLink = "https://www.google.com/maps?q=" + lat + "," + lon;
+
+      // Buka aplikasi email dengan lokasi yang sudah terisi
+      var emailBody = "Lokasi Anda: " + locationLink;
+      window.location.href = "mailto:fauzankamaladdaffaaa@gmail.com?subject=Lokasi Saya&body=" + encodeURIComponent(emailBody);
+
+      document.getElementById("location").innerHTML = "Lokasi Anda: <a href='" + locationLink + "' target='_blank'>" + lat + ", " + lon + "</a>";
+    }
+
+    function showError(error) {
+      switch(error.code) {
+        case error.PERMISSION_DENIED:
+          document.getElementById("location").innerHTML = "Izin lokasi ditolak.";
+          break;
+        case error.POSITION_UNAVAILABLE:
+          document.getElementById("location").innerHTML = "Informasi lokasi tidak tersedia.";
+          break;
+        case error.TIMEOUT:
+          document.getElementById("location").innerHTML = "Permintaan lokasi timeout.";
+          break;
+        case error.UNKNOWN_ERROR:
+          document.getElementById("location").innerHTML = "Kesalahan tidak diketahui.";
+          break;
+      }
+    }
+  </script>
+</body>
+</html>
